@@ -1,11 +1,6 @@
+using Infrastructure.Data;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Client_Task_Executor
 {
@@ -13,6 +8,10 @@ namespace Client_Task_Executor
     {
         public static void Main(string[] args)
         {
+            using (var client = new MainContext())
+            {
+                client.Database.EnsureCreated();
+            }
             CreateHostBuilder(args).Build().Run();
         }
 

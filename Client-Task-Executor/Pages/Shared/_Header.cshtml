@@ -1,0 +1,14 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using ApplicationCore.Entities.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+<header class="bg-dark text-white" style="overflow-x:hidden">
+    <div class="row">
+        <div class="navbar col-md-12 justify-content-center">
+        <ul class="nav">
+          <partial name="_LoginPartial" />
+        </ul>
+      </div>
+    </div>
+  </header>
