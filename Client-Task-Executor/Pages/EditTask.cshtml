@@ -1,0 +1,78 @@
+﻿@page
+@using Microsoft.AspNetCore.Identity
+@using ApplicationCore.Entities.Identity
+@inject UserManager<User> UserManager
+@model Client_Task_Executor.Pages.EditTaskModel
+
+@if (await UserManager.IsInRoleAsync(await UserManager.GetUserAsync(User), "Client"))
+{
+    <div class="row container mt-5">
+        <div class="col-md-12">
+            <form method="post">
+                <ul class="list-group">
+                    <h2>@Model.Task.Title</h2>
+                    <li class="list-group-item">
+                        <b>Описание :</b> @Model.Task.Description
+                    </li>
+                    <li class="list-group-item">
+                        <b>Заказчик :</b> @Model.Task.Client.FirstName @Model.Task.Client.SurName
+                    </li>
+                    <li class="list-group-item">
+                        <b>Исполнитель :</b> @if (Model.Task.Executor != null)
+                        {
+                            @Model.Task.Executor.FirstName @Model.Task.Executor.SurName
+                        }
+                    </li>
+                    <li class="list-group-item">
+                        <b>Статус выполнения :</b> @Model.Task.Status
+                    </li>
+                    <li class="list-group-item">
+                        <label asp-for="Input.DeadLine"></label>
+                        <input asp-for="Input.DeadLine" />
+                    </li>
+                </ul>
+                <button type="submit" class="btn btn-dark" asp-page-handler="EditForClient" asp-route-id="@Model.Task.Id">Сохранить</button>
+            </form>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row container mt-5">
+        <div class="col-md-12">
+            <form method="post">
+                <ul class="list-group">
+                    <h2>@Model.Task.Title</h2>
+                    <li class="list-group-item">
+                        <b>Описание :</b> @Model.Task.Description
+                    </li>
+                    <li class="list-group-item">
+                        <b>Заказчик :</b> @Model.Task.Client.FirstName @Model.Task.Client.SurName
+                    </li>
+                    <li class="list-group-item">
+                        <label asp-for="Input.Executor"></label>
+                        <select asp-for="Input.Executor" class="selectpicker" data-show-subtext="false" data-live-search="true">
+                            @foreach (var executor in await UserManager.GetUsersInRoleAsync("Executor"))
+                            {
+                                <option value="@executor.Id">@executor.FirstName @executor.SurName</option>
+                            }
+                        </select>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Статус выполнения :</b> @Model.Task.Status
+                        <br>
+                        @if (Model.Task.Status != "Выполнено")
+                        {
+                                <label asp-for="Input.ChangeStatus"></label>
+                                <input type="checkbox" asp-for="Input.ChangeStatus">
+                        }
+                    </li>
+                    <li class="list-group-item">
+                        <b>Срок выполнения :</b> @Model.Task.DeadLine.Date
+                    </li>
+                </ul>
+                <button type="submit" class="btn btn-dark" asp-page-handler="EditForExecutor" asp-route-id="@Model.Task.Id">Сохранить</button>
+            </form>
+        </div>
+    </div>
+}

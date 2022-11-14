@@ -5,8 +5,11 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
+    
+        var currentUser = await UserManager.GetUserAsync(User);
+    
             <li>
-                <a class="nav-link">Привет @User.Identity?.Name !</a>
+                <a class="nav-link">Привет @currentUser.FirstName !</a>
             </li>
             <li>
                <a class="nav-link" asp-area="Identity" asp-page="/Account/Logout">Выйти</a>

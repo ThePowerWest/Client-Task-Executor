@@ -1,0 +1,60 @@
+﻿@page
+@model Client_Task_Executor.Pages.TaskModel
+
+<div class="row container mt-5">
+    <div class="col-md-12">
+        <form method="post">
+            <ul class="list-group">
+                <h2>@Model.Task.Title</h2>
+                <li class="list-group-item">
+                    <b>Описание :</b> @Model.Task.Description
+                </li>
+                <li class="list-group-item">
+                    <b>Заказчик :</b> @Model.Task.Client.FirstName @Model.Task.Client.SurName
+                </li>
+                <li class="list-group-item">
+                    <b>Исполнитель :</b> @if (Model.Task.Executor != null)
+                    {
+                        @Model.Task.Executor.FirstName<a> </a>@Model.Task.Executor.SurName
+                    }
+                </li>
+                <li class="list-group-item">
+                    <b>Статус выполнения :</b> @Model.Task.Status
+                </li>
+                <li class="list-group-item">
+                    <b>Срок выполнения :</b> @Model.Task.DeadLine.Date
+                </li>
+            </ul>
+            @if (Model.Task.Status != "Выполнено")
+            {
+                <button type="submit" class="btn btn-dark mt-2" asp-page="EditTask" asp-route-id="@Model.Task.Id" asp-route-deadLine="@Model.Task.DeadLine">Редактировать</button>
+            }
+        </form>
+
+        <h3 class="mt-2">Комментарии</h3>
+        @foreach (var comment in Model.Task.Comments)
+        {
+                <ul class="list-group mt-1">
+                     <li class="list-group-item">
+                        <b>@comment.Commentator.FirstName @comment.Commentator.SurName</b>
+                     </li>
+                     <li class="list-group-item">
+                        @comment.Text
+                     </li>
+                     <li class="list-group-item">
+                        @comment.DateOfComment
+                     </li>
+                </ul>
+        }
+
+        <form method="post" class="mt-2">
+            <div class="form-group">
+                <label asp-for="Input.Comment"></label>
+                <input asp-for="Input.Comment" class="form-control" />
+            </div>
+            <div class="form-group float-end">
+                <button type="submit" asp-page-handler="AddComment" asp-route-id="@Model.Task.Id" class="btn btn-dark">Оставить комментарий</button>
+            </div>
+        </form>
+    </div>
+</div>

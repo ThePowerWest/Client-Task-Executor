@@ -1,5 +1,26 @@
 ﻿@page
 @model IndexModel
-@{
-    ViewData["Title"] = "Главная страница";
-}
+@using Microsoft.AspNetCore.Identity
+@using ApplicationCore.Entities.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+<div class="row">
+    <div class="col-md-12">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <partial name="_TaskListPartial"/>
+            
+            @if (!Model.Tasks.Any())
+            {
+               <h2 class="text-center mt-5">Задач нет</h2>
+            }
+        }
+        else
+        {
+        <h2 class="text-center mt-5">
+            Войдите, чтобы увидеть задачи
+        </h2>
+        }
+    </div>
+</div>

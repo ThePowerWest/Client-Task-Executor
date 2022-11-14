@@ -23,7 +23,7 @@ namespace ApplicationCore.Entities.Main
         /// <summary>
         /// Исполнитель
         /// </summary>
-        public User Executor { get; set; }
+        public User? Executor { get; set; }
 
         /// <summary>
         /// Заказчик
@@ -43,6 +43,6 @@ namespace ApplicationCore.Entities.Main
         /// <summary>
         /// Комментарии
         /// </summary>
-        public IEnumerable<Comment> Comments { get; set; }
+        public List<Comment>? Comments { get; set; }
     }
 }

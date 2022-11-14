@@ -15,14 +15,16 @@ namespace Client_Task_Executor.Pages.Account
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
+        private readonly SignInManager<User> SignInManager;
         private readonly UserManager<User> UserManager;
         /// <summary>
         /// ctor
         /// </summary>
-        public RegisterModel(
-            UserManager<User> userManager)
+        public RegisterModel(UserManager<User> userManager,
+            SignInManager<User> signInManager)
         {
             UserManager = userManager;
+            SignInManager = signInManager;
         }
 
         [BindProperty]
@@ -90,11 +92,13 @@ namespace Client_Task_Executor.Pages.Account
                     if (Input.IAmExecutor)
                     {
                         await UserManager.AddToRoleAsync(user, "Executor");
+                        await SignInManager.PasswordSignInAsync(Input.UserName, Input.Password, true, false);
                         return LocalRedirect(Url.Content("~/"));
                     }
                     else
                     {
                         await UserManager.AddToRoleAsync(user, "Client");
+                        await SignInManager.PasswordSignInAsync(Input.UserName, Input.Password, true, false);
                         return LocalRedirect(Url.Content("~/"));
                     }
                 }

@@ -1,9 +1,9 @@
 using ApplicationCore.Entities.Identity;
+using ApplicationCore.Interfaces;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -15,6 +15,15 @@ namespace Client_Task_Executor
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+        }
+
+        /// <summary>
+        /// Внедрение зависимойстей
+        /// </summary>
+        private static void ConfigureDI(IServiceCollection services)
+        {
+            services.AddScoped(typeof(IReadRepository<>), typeof(EFRepository<>));
+            services.AddScoped(typeof(IRepository<>), typeof(EFRepository<>));
         }
 
         public IConfiguration Configuration { get; }
@@ -37,6 +46,8 @@ namespace Client_Task_Executor
                 .AddDefaultTokenProviders();
 
             services.AddEntityFrameworkSqlite().AddDbContext<MainContext>();
+
+            ConfigureDI(services);
 
             services.AddRazorPages();
         }

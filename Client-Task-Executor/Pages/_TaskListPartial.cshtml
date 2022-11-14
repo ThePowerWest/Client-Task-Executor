@@ -1,0 +1,110 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using ApplicationCore.Entities.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@model IndexModel
+
+@if (await UserManager.IsInRoleAsync(Model.CurrentUser, "Client"))
+{
+    <div class="container mt-2 text-center">
+         <a class="btn btn-dark" asp-page="AddTask">Добавить задачу</a>
+    </div>
+
+    <div class="text-center">
+        Сортировать по: 
+        @Html.ActionLink("По Статусам", "OnGet", new { sortBy = "По статусам" })
+         | 
+        @Html.ActionLink("По исполнителям", "OnGet", new { sortBy = "По исполнителям" })
+         | 
+        @Html.ActionLink("По сроку выполнения", "OnGet", new { sortBy = "По сроку выполнения" })
+
+            <form method="get">
+                  <div class="row">
+                      <input class="col-md-11 form-control" id="search" name="searchString" placeholder="Поиск в заголовках и описаниях..." type="search">
+                      <button class="col-md-1 btn btn-dark" asp-action="OnGet" asp-route-searchString="search" type="submit">Поиск</button>
+                  </div>
+            </form>
+    </div>
+
+        
+
+    @foreach (var task in Model.ClientTasks)
+    {
+        <div class="container mt-5">
+             <form method="post">
+                  <ul class="list-group">
+                      <li class="list-group-item">
+                            <h2>@task.Title</h2>
+                      </li>
+                      <li class="list-group-item">
+                            <b>Описание :</b> @task.Description
+                      </li>
+                      <li class="list-group-item">
+                            <b>Заказчик :</b> @task.Client.FirstName @task.Client.SurName
+                            <br>
+                            <b>Исполнитель :</b> @if (task.Executor != null)
+                            {
+                                @task.Executor.FirstName<a> </a>@task.Executor.SurName
+                            }
+                      </li>
+                      <li class="list-group-item">
+                            <b>Статус :</b> @task.Status
+                      </li>
+                      <li class="list-group-item">
+                            <b>Срок выполнения до :</b> @task.DeadLine.Date
+                      </li>
+                  </ul>
+                  <button class="btn btn-dark mt-2" type="submit" asp-route-id="@task.Id" asp-page="Task">Перейти к задаче</button>
+             </form>
+        </div>
+    }
+}
+else
+{
+    <div class="text-center">
+            Сортировать по: 
+        @Html.ActionLink("По Статусам", "OnGet", new { sortBy = "По статусам" })
+             | 
+        @Html.ActionLink("По исполнителям", "OnGet", new { sortBy = "По исполнителям" })
+             | 
+        @Html.ActionLink("По сроку выполнения", "OnGet", new { sortBy = "По сроку выполнения" })
+
+            <form method="get">
+                <div class="row">
+                    <input class="col-md-11 form-control" id="search" name="searchString" placeholder="Поиск в заголовках и описаниях..." type="search">
+                    <button class="col-md-1 btn btn-dark" asp-action="OnGet" asp-route-searchString="search" type="submit">Поиск</button>
+                </div>
+            </form>
+    </div>
+
+    @foreach (var task in Model.Tasks)
+    {
+        <div class="container mt-5">
+             <form method="post">
+                 <ul class="list-group">
+                     <li class="list-group-item">
+                         <h2>@task.Title</h2>
+                     </li>
+                     <li class="list-group-item">
+                         <b>Описание :</b> @task.Description
+                     </li>
+                     <li class="list-group-item">
+                         <b>Заказчик :</b> @task.Client.FirstName @task.Client.SurName
+                         <br>
+                         <b>Исполнитель :</b> @if (task.Executor != null)
+                        {
+                            @task.Executor.FirstName<a> </a>@task.Executor.SurName
+                        }
+                     </li>
+                     <li class="list-group-item">
+                         <b>Статус :</b> @task.Status
+                     </li>
+                     <li class="list-group-item">
+                         <b>Срок выполнения до :</b> @task.DeadLine.Date
+                     </li>
+                 </ul>
+                 <button class="btn btn-dark mt-2" type="submit" asp-route-id="@task.Id" asp-page="Task">Перейти к задаче</button>
+             </form>
+        </div>
+    }
+}

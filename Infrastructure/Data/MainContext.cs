@@ -2,7 +2,6 @@
 using ApplicationCore.Entities.Main;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 
 namespace Infrastructure.Data
 {

@@ -12,7 +12,7 @@ namespace ApplicationCore.Entities.Main
         /// <summary>
         /// Пользователь
         /// </summary>
-        public User User { get; set; }
+        public User Commentator { get; set; }
 
         /// <summary>
         /// Текст комментария
